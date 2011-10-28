@@ -17,8 +17,14 @@ sub normalize_action : Test {
     my $forms = $finder->find_forms(
         '<form action="/hello"><input name="bar" /></form>');
 
-    is_deeply($forms,
-        [{action => 'http://example.com/hello', method => 'GET', fields => ['bar']}]);
+    is_deeply(
+        $forms,
+        [   {   action => 'http://example.com/hello',
+                method => 'GET',
+                fields => ['bar']
+            }
+        ]
+    );
 }
 
 sub do_not_normalize_action_when_action_is_absolute : Test {
@@ -29,8 +35,14 @@ sub do_not_normalize_action_when_action_is_absolute : Test {
     my $forms = $finder->find_forms(
         '<form action="http://foo.com/hello"><input name="bar" /></form>');
 
-    is_deeply($forms,
-        [{action => 'http://foo.com/hello', method => 'GET', fields => ['bar']}]);
+    is_deeply(
+        $forms,
+        [   {   action => 'http://foo.com/hello',
+                method => 'GET',
+                fields => ['bar']
+            }
+        ]
+    );
 }
 
 sub preserve_query_string : Test {
@@ -41,8 +53,14 @@ sub preserve_query_string : Test {
     my $forms = $finder->find_forms(
         '<form action="/hello?foo=bar"><input name="bar" /></form>');
 
-    is_deeply($forms,
-        [{action => 'http://example.com/hello?foo=bar', method => 'GET', fields => ['bar']}]);
+    is_deeply(
+        $forms,
+        [   {   action => 'http://example.com/hello?foo=bar',
+                method => 'GET',
+                fields => ['bar']
+            }
+        ]
+    );
 }
 
 sub find_multiple_forms_in_html : Test {
@@ -50,16 +68,33 @@ sub find_multiple_forms_in_html : Test {
 
     my $finder = $self->_build_finder;
 
-    my $forms =
-      $finder->find_forms('<form action="http://foo.com/hello"><input name="bar" /></form>'
-          . '<form action="http://foo.com/hello"><input name="bar" /></form>');
+    my $forms = $finder->find_forms(
+            '<form action="http://foo.com/hello"><input name="bar" /></form>'
+          . '<form action="http://foo.com/hello"><input name="bar" /></form>'
+    );
 
     is_deeply(
         $forms,
-        [   {action => 'http://foo.com/hello', method => 'GET', fields => ['bar']},
-            {action => 'http://foo.com/hello', method => 'GET', fields => ['bar']}
+        [   {   action => 'http://foo.com/hello',
+                method => 'GET',
+                fields => ['bar']
+            },
+            {   action => 'http://foo.com/hello',
+                method => 'GET',
+                fields => ['bar']
+            }
         ]
     );
+}
+
+sub return_empty_arrayref_when_no_form_was_found : Test {
+    my $self = shift;
+
+    my $finder = $self->_build_finder;
+
+    my $forms = $finder->find_forms('foobar');
+
+    is_deeply($forms, []);
 }
 
 sub _build_finder {
