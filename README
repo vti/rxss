@@ -10,3 +10,7 @@ Usage:
 Provide your own patterns (take a look at patterns/simple.txt):
 
     $ bin/rxss -p mypatterns.txt localhost:5000
+
+TODO:
+    - recursive scanning
+    - verbose mode
