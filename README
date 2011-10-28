@@ -1,1 +1,12 @@
 Find XSS on *your* websites.
+
+The idea is simple: find forms on a page, try different xss patterns on every
+field and check that after form submission the pattern is still there.
+
+Usage:
+
+    $ bin/rxss localhost:5000
+
+Provide your own patterns (take a look at patterns/simple.txt):
+
+    $ bin/rxss -p mypatterns.txt localhost:5000
