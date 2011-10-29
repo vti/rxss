@@ -16,7 +16,7 @@ sub get {
 
     my $response = $self->_build_ua->get($url);
 
-    die "Failed!\n" unless $response->{success};
+    die $response->{content} unless $response->{success};
 
     my $content = $response->{content};
 
@@ -33,7 +33,7 @@ sub post {
 
     my $response = $self->_build_ua->post_form($url, $form_data);
 
-    die "Failed!\n" unless $response->{success};
+    die $response->{content} unless $response->{success};
 
     my $content = $response->{content};
 
