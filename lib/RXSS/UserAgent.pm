@@ -3,7 +3,7 @@ package RXSS::UserAgent;
 use strict;
 use warnings;
 
-use base 'RXSS::Base';;
+use base 'RXSS::Base';
 
 use URI;
 use HTTP::Tiny;
@@ -16,7 +16,7 @@ sub get {
 
     my $response = $self->_build_ua->get($url);
 
-    die $response->{content} unless $response->{success};
+    die $response->{content} unless $response->{status} =~ m/^(?:30\d|200)$/;
 
     my $content = $response->{content};
 
@@ -33,7 +33,7 @@ sub post {
 
     my $response = $self->_build_ua->post_form($url, $form_data);
 
-    die $response->{content} unless $response->{success};
+    die $response->{content} unless $response->{status} =~ m/^(?:30\d|200)$/;
 
     my $content = $response->{content};
 
