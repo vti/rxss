@@ -6,19 +6,58 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 
-use IO::Interactive qw(is_interactive);
 use Getopt::Long;
+use IO::Interactive qw(is_interactive);
+use Pod::Usage;
 
 use RXSS;
 
+my $help;
 my $patterns = "$FindBin::Bin/../patterns/simple.txt";
 my $verbose;
 GetOptions(
     "patterns=s" => \$patterns,
-    "verbose"    => \$verbose
-) or die $!;
+    "verbose"    => \$verbose,
+    "help|?"     => \$help
+) or pod2usage(2);
+pod2usage(1) if $help;
 
 my $rxss = RXSS->new(patterns => $patterns, verbose => $verbose);
 
 my @urls = is_interactive() ? @ARGV : map { chomp; $_ } <>;
 $rxss->run(@urls);
+
+__END__
+
+=head1 NAME
+
+rxss - Find XSS on *your* website
+
+=head1 SYNOPSIS
+
+rxss [options] [url ...]
+
+=head1 OPTIONS
+
+=over
+
+=item B<-patterns>
+
+Specify patterns file.
+
+=item B<-verbose>
+
+Verbose mode.
+
+=item B<-help>
+
+Print a brief help message and exits.
+
+=back
+
+=head1 DESCRIPTION
+
+The idea is simple: find forms on a page, try different xss patterns on every
+field and check that after form submission the pattern is still there.
+
+=cut

@@ -17,6 +17,7 @@ requires 'FindBin';
 requires 'Getopt::Long';
 requires 'HTML::TreeBuilder';
 requires 'HTTP::Tiny';
+requires 'Pod::Usage';
 requires 'URI';
 
 test_requires 'Test::Class';
