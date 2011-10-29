@@ -25,6 +25,9 @@ pod2usage(1) if $help;
 my $rxss = RXSS->new(patterns => $patterns, verbose => $verbose);
 
 my @urls = is_interactive() ? @ARGV : map { chomp; $_ } <>;
+
+die pod2usage(1) unless @urls;
+
 $rxss->run(@urls);
 
 __END__
